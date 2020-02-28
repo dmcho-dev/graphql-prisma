@@ -6,11 +6,29 @@ const prisma = new Prisma({
 })
 
 /**
- * 55. Customizing Type Relationships
+ * 56. Modeling a Review System with Prisma: Set Up
  */
 
 
 // prisma.query prisma.mutation prisma.subscription prisma.exists
+
+/**
+ * Goal: Model a review website using prisma
+ * 
+ * 1. Define Book, User, and Review with there scalar fields
+ * 2. Configure the relationships between the types
+ *      - Deleting a book should delete its reviews
+ *      - Deleting a user should delete its reviews
+ * 3. deploy the application 
+ * 4. Test your work from the prisma playground
+ *      - Create a book
+ *      - Create two users
+ *      - Have each user leave a review for the book
+ *      - Delete a user and ensure it  review goes away
+ *      - Delete the book and ensure the other review goes away
+ */
+
+
 
 
 /**
