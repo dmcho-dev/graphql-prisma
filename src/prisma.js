@@ -6,7 +6,7 @@ const prisma = new Prisma({
 })
 
 /**
- * 54. Checking if Data Exists Using Prisma Bindings
+ * 55. Customizing Type Relationships
  */
 
 
@@ -108,15 +108,15 @@ const prisma = new Prisma({
     return post.author
  }
 
- updatePostForUser("ck712uwgp00ea07885x41b9j8", {
-     published: true
- })
- .then(user => {
-     console.log(JSON.stringify(user, null, 2))
- })
- .catch(error => {
-     console.log({error})
- })
+//  updatePostForUser("ck712uwgp00ea07885x41b9j8", {
+//      published: true
+//  })
+//  .then(user => {
+//      console.log(JSON.stringify(user, null, 2))
+//  })
+//  .catch(error => {
+//      console.log({error})
+//  })
 
 
 
