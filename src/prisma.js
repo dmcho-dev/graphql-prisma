@@ -5,11 +5,25 @@ const prisma = new Prisma({
     endpoint: 'http://localhost:4466'
 })
 
+/**
+ * 54. Checking if Data Exists Using Prisma Bindings
+ */
+
+
 // prisma.query prisma.mutation prisma.subscription prisma.exists
 
+
 /**
- * 53. Using Async/Await with Prisma Bindings
+ * exists // 존재하다
+ * 존재하는지 확인하는 method
  */
+
+//  prisma.exists.Comment({
+//      id: "ck713wva200l00788kaa4vypz"
+//  }).then(exists => {
+//      console.log({exists})
+//  })
+
 
 /**
  * 1. Create a new Post
@@ -17,6 +31,11 @@ const prisma = new Prisma({
  */
 
  const createPostForUser = async (authorId, data) => {
+    const userExists = await prisma.exists.User({ id: authorId })
+    if(!userExists) {
+        throw new Error("User not found")
+    }
+
     const post = await prisma.mutation.createPost({
         data: {
             ...data,
@@ -28,66 +47,76 @@ const prisma = new Prisma({
         }
     }, `{
         id
-    }`)
-
-    const user = await prisma.query.user({
-        where: {
-            id: post.author.id
-        }
-    }, `{
-        id
-        name
-        email
-        posts {
+        author {
             id
-            title
-            published
+            name
+            email
+            posts {
+                id
+                title
+                published
+            }
         }
     }`)
 
-    return user
+    return post.author
  }
 
 //  createPostForUser("ck712hakd009h0788o2d83ea7", {
 //      title: "Create from Function",
 //      body: "Sample",
 //      published: false,
-//  }).then(user => console.log({user}))
+//  })
+//  .then(user => console.log({ user }))
+//  .catch(error => {
+//      console.log({ error })
+//  })
 
 
 /**
- * Goal: Use async/await with prisma-bindings
+ * Goal: Improve updatePostForUser
  * 
- * 1. Create "updatePostForUser" that accepts the post id and data to update
- * 2. Update the post (get author id back)
- * 3. Fetch the user associated with the updated post and return the user data
- *     - Grap the same fields gradded for createPostForUser
- * 4. Call the function with the id and data and use a then method call to get the user information
- * 5. Print the user info to the console and test your work
+ * 1. Use prisma.exists to verify that the post exists
+ *      - If there is not post with that id, throw an error
+ * 2. Remove the unnecessary user query by updating the selection set for updatePost
+ * 3. Add a catch method call to catch and print errors
+ * 4. Test your working by updating an existing post and a non-existent post.
+ * 
  */
 
  const updatePostForUser = async (postId, data) => {
-    const post = await prisma.mutation.updatePost({where: { id: postId }, data}, `{ author { id} }`)
+    const postExists = await prisma.exists.Post({ id: postId })
+    if(!postExists) {
+        throw new Error("Post not found")
+    }
 
-    const user = await prisma.query.user({where: { id: post.author.id }}, `{
-        id
-        name
-        email
-        posts {
-            id
-            title
-            published
-        }
-    }`)
+    const post = await prisma.mutation.updatePost({
+        where: { id: postId }, data}, 
+        `{ 
+            author {
+                id
+                name
+                email
+                posts {
+                    id
+                    title
+                    published
+                }
+            }
+         }`)
 
-    return user
+    return post.author
  }
 
-//  updatePostForUser("ck712uwgp00ea07885x41b9j8", {
-//      published: true
-//  }).then(user => {
-//      console.log(JSON.stringify(user, null, 2))
-//  })
+ updatePostForUser("ck712uwgp00ea07885x41b9j8", {
+     published: true
+ })
+ .then(user => {
+     console.log(JSON.stringify(user, null, 2))
+ })
+ .catch(error => {
+     console.log({error})
+ })
 
 
 
