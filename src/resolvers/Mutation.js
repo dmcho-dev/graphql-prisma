@@ -1,40 +1,29 @@
 import uuidv4 from 'uuid/v4'
-import { PubSub } from 'graphql-yoga'
+
+
+/**
+ * 62. Adding Prisma into GraphQL Mutations
+ */
+
+
 
 const Mutation = {
-    createUser(parent, args, { db }, info) {
-        const emailTaken = db.users.some(user => user.email === args.data.email)
-        if(emailTaken) {
-            throw new Error('Email taken.')
-        }
+    async createUser(parent, args, { prisma }, info) {
+        const emailTaken = await prisma.exists.User({email: args.data.email})
+        if(emailTaken) throw new Error("Email taken")
 
-        const user = {
-            id: uuidv4(),
-            ...args.data
-        }
-        
-        db.users.push(user)
-        return user
+        return prisma.mutation.createUser({ data: args.data }, info)
     },
-    deleteUser(parent, args, { db }, info) {
-        const userIndex = db.users.findIndex(user=> user.id === args.id)
-        if(userIndex === -1) {
-            throw new Error('User not found')
+    async deleteUser(parent, args, { prisma }, info) {
+        const userExists = await prisma.exists.User({email: args.data.email})
+        if(!userExists) throw new Error("User not found")
+
+        const opArgs = {}
+        opArgs.where = {
+            id: args.id
         }
 
-        const deleteUser = db.users.splice(userIndex, 1)
-        posts = db.posts.filter(post => {
-            const match = post.author === args.id
-            
-            if(match) {
-                db.comments = db.comments.filter(comment => comment.post !== post.id)
-            }
-
-            return !match
-        })
-        db.comments = db.comments.filter(comment => comment.author !== args.id)
-
-        return deleteUser[0]
+        return prisma.mutation.deleteUser(opArgs, info)
     },
     updateUser(parent, args, { db }, info) {
         const { id, data } = args
