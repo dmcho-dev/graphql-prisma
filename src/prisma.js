@@ -6,7 +6,7 @@ const prisma = new Prisma({
 })
 
 /**
- * 56. Modeling a Review System with Prisma: Set Up
+ * 57. Modeling a Review System with Prisma: Solution
  */
 
 
