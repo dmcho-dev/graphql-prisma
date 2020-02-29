@@ -1,23 +1,36 @@
+
 /**
- * Goal: Modify posts query to return posts from the database
- * 
- * 1. Comment out existing code
- * 2. Use the correct prisma method
- *      - Ignore operation arguments for now
- * 3. Run the posts query on the Node.js GraphQL API to verify it works
- *      - Just ask for scalar fields
- * 
+ * 60. Integrating Operation Argument
  */
 
 
 const Query = {
     users(parent, args, { prisma }, info) {
-        console.log({args, info})
-        return prisma.query.users(null, info)
+        console.log({args})
+        const opArgs = {}
+        if(args.query) {
+            opArgs.where = {
+                OR: [
+                    { name_contains: args.query },
+                    { email_contains: args.query },
+                ]
+            }
+        }
+
+        return prisma.query.users(opArgs, info)
 
     },
     posts(parent, args, { prisma }, info) {
-        return prisma.query.posts(null, info)
+        const opArgs = {}
+        if(args.query) {
+            opArgs.where = {
+                OR: [
+                    { title_contains: args.query },
+                    { body_contains: args.query },
+                ]
+            }
+        }
+        return prisma.query.posts(opArgs, info)
 
     },
     comments(parent, args, { db }, info) {

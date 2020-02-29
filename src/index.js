@@ -3,8 +3,6 @@ import db from './db'
 import * as resolvers from './resolvers'
 import prisma from './prisma'
 
-// 40. Enums
-
 const pubsub = new PubSub()
 
 const server = new GraphQLServer({
@@ -16,7 +14,6 @@ const server = new GraphQLServer({
         prisma,
     }
 })
-
 
 server.start((e) => {
     console.log(`wow - The server is up!`);
