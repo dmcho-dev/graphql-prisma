@@ -1,22 +1,24 @@
-const Query = {
-    users(parent, args, { db }, info) {
-        if(!args.query) {
-            return db.users
-        }
-        return db.users.filter((user) => {
-            return user.name.toLowerCase().includes(args.query.toLowerCase())
-        })
-    },
-    posts(parent, args, { db }, info) {
-        if(!args.query) {
-            return db.posts
-        }
+/**
+ * Goal: Modify posts query to return posts from the database
+ * 
+ * 1. Comment out existing code
+ * 2. Use the correct prisma method
+ *      - Ignore operation arguments for now
+ * 3. Run the posts query on the Node.js GraphQL API to verify it works
+ *      - Just ask for scalar fields
+ * 
+ */
 
-        return db.posts.filter((post) => {
-            const isTitleMatch = post.title.toLowerCase().includes(args.query.toLowerCase())
-            const isBodyMatch = post.body.toLowerCase().includes(args.query.toLowerCase())
-            return isTitleMatch || isBodyMatch
-        })
+
+const Query = {
+    users(parent, args, { prisma }, info) {
+        console.log({args, info})
+        return prisma.query.users(null, info)
+
+    },
+    posts(parent, args, { prisma }, info) {
+        return prisma.query.posts(null, info)
+
     },
     comments(parent, args, { db }, info) {
         return db.comments
