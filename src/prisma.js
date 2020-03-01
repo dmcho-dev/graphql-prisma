@@ -1,7 +1,7 @@
 import { Prisma } from 'prisma-binding'
 
 /**
- * 66. Closing Prisma to the Outside World
+ * 67. Allowing for Generated Schemas
  */
 
 const prisma = new Prisma({
