@@ -1,6 +1,5 @@
 const Query = {
     users(parent, args, { prisma }, info) {
-        console.log({args})
         const opArgs = {}
         if(args.query) {
             opArgs.where = {
