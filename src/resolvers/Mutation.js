@@ -1,26 +1,6 @@
 import uuidv4 from 'uuid/v4'
 
 
-/**
- * 64. Adding Prisma into GraphQL Update Mutatios: Part II
- */
-
- /**
-  * Goal: Refactor the deletePost mutation to use Prisma
-  * 
-  * 1. Refactor deletePost mutation resolver to use prisma instead of the array data
-  *     - Don't worry about pubsub or subscription
-  * 2. Test the mutation from localhost:4000
-  */
-
- /**
-  * Goal: Refactor the updatePost mutation to use Prisma
-  * 
-  * 1. Refactor updatePost mutation resolver to use prisma instead of the array data
-  *     - Don't worry about pubsub or subscription
-  * 2. Test the mutation from localhost:4000
-  */
-
 const Mutation = {
     async createUser(parent, args, { prisma }, info) {
         return prisma.mutation.createUser({ data: args.data }, info)
@@ -31,7 +11,7 @@ const Mutation = {
     async updateUser(parent, args, { prisma }, info) {
         return prisma.mutation.updateUser({ where: { id: args.id }, data: args.data }, info)
     },
-    createPost(parent, args, { prisma, pubsub }, info) {
+    createPost(parent, args, { prisma }, info) {
         return prisma.mutation.createPost({ data: {
             title: args.data.title,
             body: args.data.body,
@@ -43,14 +23,14 @@ const Mutation = {
             }
         } }, info)
     },
-    deletePost(parent, args, { prisma, pubsub }, info) {
+    deletePost(parent, args, { prisma }, info) {
         return prisma.mutation.deletePost({
             where: {
                 id: args.id
             }
         }, info)
     },
-    updatePost(parent, args, { prisma, pubsub }, info) {
+    updatePost(parent, args, { prisma }, info) {
         return prisma.mutation.updatePost({
             where: {
                 id: args.id
